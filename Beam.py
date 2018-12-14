@@ -20,6 +20,7 @@ class Player:
         self.x, self.y = x, y
         self.x_m, self.y_m = 0, 0
         self.v_x, self.v_y = 0, 0
+        self.coef, self.speed = 0.9, 0.8
         self.teta = pi / 6
         self.w, self.s = False, False
         self.a, self.d = False, False
@@ -27,24 +28,24 @@ class Player:
     def force(self):
         kx, ky = 0, 0
         if self.w:
-            ky -= speed
+            ky -= self.speed
         if self.s:
-            ky += speed
+            ky += self.speed
         if self.a:
-            kx -= speed
+            kx -= self.speed
         if self.d:
-            kx += speed
+            kx += self.speed
         if kx != 0 and ky != 0:
             k = sqrt(kx ** 2 + ky ** 2)
-            kx *= speed / k
-            ky *= speed / k
+            kx *= self.speed / k
+            ky *= self.speed / k
         self.v_x += kx
         self.v_y += ky
 
     def move(self):
         self.x += self.v_x
         self.y += self.v_y
-        l = speed * coef / (1 - coef)
+        l = self.speed * self.coef / (1 - self.coef)
         if self.x > width - l:
             self.x -= 2 * (self.x - width + l)
             self.v_x *= -1
@@ -57,8 +58,8 @@ class Player:
         elif self.y < l:
             self.y += 2 * (l - self.y)
             self.v_y *= -1
-        self.v_x *= coef if abs(self.v_x) > 0.2 else 0
-        self.v_y *= coef if abs(self.v_y) > 0.2 else 0
+        self.v_x *= self.coef if abs(self.v_x) > 0.2 else 0
+        self.v_y *= self.coef if abs(self.v_y) > 0.2 else 0
 
     def draw(self):
         field.create_oval((self.x - side // 2), (self.y - side // 2),
@@ -236,7 +237,6 @@ def render():
 
 t = time()
 width, height, side = 800, 500, 20
-coef, speed = 0.9, 0.8
 
 
 root = Tk()
